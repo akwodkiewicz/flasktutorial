@@ -1,0 +1,70 @@
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+{% block title %}Działy{% endblock %}
+{% block body %}
+<div class="content-section">
+    <div class="outer">
+        <div class="middle"> 
+            <div class="inner">
+                <br/>
+                {{ utils.flashed_messages() }}
+                <br/>
+                <h1 style="text-align:center">Działy</h1>
+                {% if departments %}
+                <hr class="intro-divider">
+                <div class="center">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="15%"> Nazwa </th>
+                                <th width="40%"> Opis </th>
+                                <th width="15%"> Liczba pracowników </th>
+                                <th width="15%"> Edytuj </th>
+                                <th width="15%"> Usuń </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for department in departments %}
+                            <tr>
+                                <td> {{ department.name }} </td>
+                                <td> {{ department.description }} </td>
+                                <td>
+                                    {% if department.employees %}
+                                        {{ department.employees.count() }}
+                                    {% else %}
+                                        0
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.edit_department', id=department.id) }}" class="btn btn-default">
+                                        <i class="fa fa-pencil"></i> Edytuj   
+                                    </a>
+                                </td>
+                                <td>
+                                    <form method="post" action="{{ url_for('admin.delete_department', id=department.id) }}"">
+                                        <button type="submit" class="btn btn-default" href="#">
+                                            <i class="fa fa-trash"></i> Usuń
+                                        </input>
+                                    </form>                                        
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center">
+                {% else %}
+                <div style="text-align: center">
+                    <h3> Nie dodano jeszcze żadnych działów </h3>
+                    <hr class="intro-divider">
+                {% endif %}
+                    <a href="{{ url_for('admin.add_departments') }}" class="btn btn-default btn-lg">
+                        <i class="fa fa-plus"></i>
+                        Dodaj dział
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

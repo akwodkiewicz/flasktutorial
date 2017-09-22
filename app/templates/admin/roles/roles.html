@@ -1,0 +1,65 @@
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+{% block title %}Role{% endblock %}
+{% block body %}
+<div class="content-section">
+    <div class="outer">
+        <div class="middle">
+            <div class="inner">
+                <br>
+                {{ utils.flashed_messages() }}
+                <br>
+                <h1 style="text-align: center;">Role</h1>
+                {% if roles %}
+                <hr class="intro-divider">
+                <div class="center">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="15%"> Nazwa </th>
+                                <th width="40%"> Opis </th>
+                                <th width="15%"> Liczba pracowników </th>
+                                <th width="15%"> Edytuj </th>
+                                <th width="15%"> Usuń </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for role in roles %}
+                            <tr>
+                                <td> {{ role.name }} </td>
+                                <td> {{ role.description }} </td>
+                                <td> 
+                                    {% if role.employees %}
+                                    {{ role.employees.count() }}
+                                    {% else %}
+                                    0
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="get" action="{{ url_for('admin.edit_role', id=role.id) }}">
+                                        <button type="submit" class="btn btn-default"><i class="fa fa-pencil"></i> Edytuj </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="post" action="{{ url_for('admin.delete_role', id=role.id) }}">
+                                        <button type="submit" class="btn btn-default"><i class="fa fa-trash"></i> Usuń </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center;">
+                {% else %}
+                <div style="text-align: center;">
+                    <h3> Żadna rola nie została jeszcze dodana </h3>
+                    <hr class="intro-divider">
+                {% endif %}
+                    <a href="{{ url_for('admin.add_role') }}" class="btn btn-default btn-lg"><i class="fa fa-plud"></i> Dodaj rolę </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
